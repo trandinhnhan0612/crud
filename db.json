@@ -1,0 +1,39 @@
+{
+  "student": [
+    {
+      "name": "Trần Đình Hoàng",
+      "job": "Tester",
+      "address": "650 nguyễn văn lượng 1",
+      "hometown": "Bình Thuận",
+      "id": 2
+    },
+    {
+      "id": 3,
+      "name": "Trần Đình Huy",
+      "job": "Business analyst",
+      "address": "450 nguyễn văn lượng",
+      "hometown": "Bình Thuận"
+    },
+    {
+      "id": 4,
+      "name": "Trần Đình Minh",
+      "job": "Devops",
+      "address": "150 nguyễn văn lượng",
+      "hometown": "Bình Thuận"
+    },
+    {
+      "id": 5,
+      "name": "Trần Đình Hùng",
+      "job": "Frontend",
+      "address": "350 nguyễn văn lượng",
+      "hometown": "Bình Thuận"
+    },
+    {
+      "name": "Cris Ronaldo",
+      "job": "Super stara",
+      "address": "Real marida",
+      "hometown": "Portugal",
+      "id": 6
+    }
+  ]
+}
