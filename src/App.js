@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import Table from "./components/table/Table";
-import {
-  createStudent,
-  deleteStudent,
-  viewStudents,
-} from "./redux/studentActions";
+import CreateModal from "./crudModal/CreateModal";
+import EditModal from "./crudModal/EditModal";
+import ViewDetailModal from "./crudModal/ViewDetailModal";
+import { deleteStudent, viewStudents } from "./redux/studentActions";
+import Swal from "sweetalert2";
 
 function App() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const students = useSelector((state) => state.data.students);
-  // redux core +++++++++++++++++++++++++
   // VIEW LIST STUDENT REDUX
   useEffect(() => {
     dispatch(viewStudents());
@@ -33,7 +32,7 @@ function App() {
   //   //   const allList = await fetchData();
   //   //   if (allList) setRenderList(allList);
   //   // };
-  //   // getAllList();
+  //   // getAllList();jc
 
   //   // cách 2: promise chaining để lấy final result, sau đó set vào setState
   //   fetchData().then((listStudent) => {
@@ -47,190 +46,131 @@ function App() {
   //   alert("Delete success!!!");
   // };
 
-  // CREATE STUDENT REDUX
-  const [name, setName] = useState("");
-  const [job, setJob] = useState("");
-  const [address, setAddress] = useState("");
-  const [hometown, setHometown] = useState("");
-  const handleCreate = (e) => {
-    // e.preventDefault();
-    const newStudent = { name, job, address, hometown };
-    dispatch(createStudent(newStudent));
-    setName("");
-    setJob("");
-    setAddress("");
-    setHometown("");
-    alert("Create new sucess!!");
-    // return navigate("/");
-  };
-
   // DELETE STUDENT REDUX
   const handleDelete = (id) => {
-    if (window.confirm("Are you delete this content?")) {
-      dispatch(deleteStudent(id));
-      alert("Delete success!");
-    }
-  };
-  useEffect(() => {
-    const exampleModal = document.getElementById("exampleModal");
-    exampleModal.addEventListener("show.bs.modal", (event) => {
-      const button = event.relatedTarget;
-      const recipient = button.getAttribute("data-bs-whatever");
-      const modalTitle = exampleModal.querySelector(".modal-title");
-      const modalBodyInput = exampleModal.querySelector(".modal-body input");
-
-      modalTitle.textContent = `Create new stduent ${recipient}`;
-      modalBodyInput.value = recipient;
+    // if (window.confirm("Are you delete this content?")) {
+    //   dispatch(deleteStudent(id));
+    //   alert("Delete success!");
+    // }
+    Swal.fire({
+      title: "Are you delete this information?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Delete",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteStudent(id));
+        Swal.fire("Delete Sucess!", "Information have been delete!", "success");
+      }
     });
-  }, []);
+  };
+  // Create modal
+  const [showCreate, setShowCreate] = useState(false);
+  const handleShowCreate = () => setShowCreate(true);
+  const handleHideCreate = () => setShowCreate(false);
+  // Edit modal
+  const [showEdit, setShowEdit] = useState(false);
+  const [idSelect, setIdSelect] = useState();
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = (id) => {
+    // const id = e.target.getAttribute("idselect");
+    setIdSelect(id);
+    setShowEdit(true);
+  };
+  // View detail student
+  const [showDetail, setShowDetail] = useState(false);
+  const handleShowDetail = (id) => {
+    setIdSelect(id);
+    setShowDetail(true);
+  };
+  const handleHideDetail = () => setShowDetail(false);
   return (
-    // BOOTSTRAP Modal ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // CREATE HTML
     <div>
       <div className="text-center mb-5 text-lg font-bold">CRUD Simple</div>
-      <button
-        type="button"
-        className="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-        data-bs-whatever=""
-      >
-        Create new student
-      </button>
-      <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="createLabel">
-                Create new student
-              </h1>
-              <button
-                className="btn-close"
-                type="button"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <form onSubmit={handleCreate}>
-                <div className="mb-3">
-                  <label htmlFor="name-student" className="col-form-label">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name-student"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="job-student" className="col-form-label">
-                    Job
-                  </label>
-                  <input
-                    value={job}
-                    onChange={(e) => setJob(e.target.value)}
-                    type="text"
-                    className="form-control"
-                    id="job-student"
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="address-student" className="col-form-label">
-                    Address
-                  </label>
-                  <input
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    type="text"
-                    className="form-control"
-                    id="address-student"
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="hometown-student" className="col-form-label">
-                    Hometown
-                  </label>
-                  <input
-                    value={hometown}
-                    onChange={(e) => setHometown(e.target.value)}
-                    type="text"
-                    className="form-control"
-                    id="hometown-student"
-                  />
-                </div>
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Back
-              </button>
-              <button type="submit" className="btn btn-primary">
-                Create new
-              </button>
-            </div>
+      <div className="flex gap-5">
+        <div>
+          <div className="mb-3">
+            <Button variant="primary" onClick={handleShowCreate}>
+              Create new
+            </Button>
           </div>
-        </div>
-      </div>
-      <Table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Address</th>
-            <th>Hometown</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(students)
-            ? students.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.name}</td>
-                  <td>{item.job}</td>
-                  <td>{item.address}</td>
-                  <td>{item.hometown}</td>
-                  <td>
-                    <div className="flex gap-x-3">
-                      <button
+          <CreateModal showCreate={showCreate} hideCreate={handleHideCreate} />
+          <EditModal
+            showEdit={showEdit}
+            idSelect={idSelect}
+            handleClose={handleCloseEdit}
+          />
+          <ViewDetailModal
+            showDetail={showDetail}
+            idSelect={idSelect}
+            handleClose={handleHideDetail}
+          />
+          <Table>
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Job</th>
+                <th>Address</th>
+                <th>Hometown</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(students)
+                ? students.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.name}</td>
+                      <td>{item.job}</td>
+                      <td>{item.address}</td>
+                      <td>{item.hometown}</td>
+                      <td>
+                        <div className="flex gap-x-3">
+                          {/* <button
                         className="w-[80px] text-white bg-orange-500 p-2 rounded-lg"
                         onClick={() => navigate(`/details-redux?id=${item.id}`)}
                       >
                         Details
-                      </button>
-                      <button
+                      </button> */}
+                          <Button
+                            onClick={(e) => handleShowDetail(item.id)}
+                            // idselect={item.id}
+                            variant="warning"
+                          >
+                            Detail
+                          </Button>
+                          <Button
+                            onClick={(e) => handleShowEdit(item.id)}
+                            // idselect={item.id}
+                            variant="success"
+                          >
+                            Update
+                          </Button>
+                          {/* <button
                         onClick={() => navigate(`/edit-redux?id=${item.id}`)}
                         className="w-[80px] text-white bg-blue-500 p-2 rounded-lg"
                       >
                         Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(item.id)}
-                        className="w-[80px] text-white bg-red-600 p-2 rounded-lg"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            : null}
-        </tbody>
-      </Table>
+                      </button> */}
+                          <button
+                            onClick={() => handleDelete(item.id)}
+                            className="w-[80px] text-white bg-red-600 p-2 rounded-lg"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                : null}
+            </tbody>
+          </Table>
+        </div>
+      </div>
     </div>
   );
 }

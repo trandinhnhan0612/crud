@@ -27,7 +27,6 @@ const TableStyles = styled.div`
 `;
 
 const Table = (props) => {
-  //   console.log(props); // check children
   return (
     <TableStyles>
       <table>{props.children}</table>

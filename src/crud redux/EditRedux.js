@@ -80,8 +80,8 @@ const EditRedux = () => {
             <input
               value={address || ""}
               onChange={handleInputChange}
-              id="input-address"
               name="address"
+              id="input-address"
               type="text"
               placeholder="Enter your address"
               className="border border-gray-500 rounded-lg p-2 w-[400px]"
@@ -97,8 +97,8 @@ const EditRedux = () => {
             <input
               value={hometown || ""}
               onChange={handleInputChange}
-              id="input-hometown"
               name="hometown"
+              id="input-hometown"
               type="text"
               placeholder="Enter your hometown"
               className="border border-gray-500 rounded-lg p-2 w-[400px]"

@@ -9,7 +9,9 @@ export const EDIT_STUDENT_ERORR = "EDIT_STUDENT_ERROR";
 export const DETAIL_STUDENT = "DETAIL_STUDENT";
 export const DELETE_STUDENT = "DELETE_STUDENT";
 export const DELETE_STUDENT_FAILED = "DELETE_STUDENT_FAILED";
-export const SHOW_MODAL = "SHOW_MODAL";
+export const SEARCH_STUDENT_REQUEST = "SEARCH_STUDENT_REQUEST";
+export const SEARCH_STUDENT_SUCCESS = "SEARCH_STUDENT_SUCCESS";
+export const SEARCH_STUDENT_FAILED = "SEARCH_STUDENT_FAILED";
 
 // export const fetchData = () => {
 //   return function (dispatch) {
@@ -81,11 +83,9 @@ export const viewDetailStudent = (id) => async (dispatch) => {
     const res = await service.detailStudent(id);
     dispatch({
       type: DETAIL_STUDENT,
-      payload: res.data,
+      payload: res,
     });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 export const editStudent = (id, updateStudent) => async (dispatch) => {
   try {
@@ -104,7 +104,7 @@ export const deleteStudent = (id) => async (dispatch) => {
     const res = await service.deleteStudent(id);
     dispatch({
       type: DELETE_STUDENT,
-      payload: res.data,
+      payload: res,
     });
     dispatch(viewStudents());
   } catch (error) {
@@ -112,5 +112,17 @@ export const deleteStudent = (id) => async (dispatch) => {
       type: DELETE_STUDENT_FAILED,
     });
     console.log(error);
+  }
+};
+export const searchStudent = (student) => async (dispatch) => {
+  try {
+    dispatch({ type: SEARCH_STUDENT_REQUEST });
+    const res = await service.searchStudent(student);
+    dispatch({
+      type: SEARCH_STUDENT_SUCCESS,
+      payload: res,
+    });
+  } catch (error) {
+    dispatch({ type: SEARCH_STUDENT_FAILED });
   }
 };

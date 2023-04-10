@@ -7,10 +7,14 @@ import {
   EDIT_STUDENT_ERORR,
   DETAIL_STUDENT,
   DELETE_STUDENT,
+  SEARCH_STUDENT_REQUEST,
+  SEARCH_STUDENT_SUCCESS,
+  SEARCH_STUDENT_FAILED,
 } from "./studentActions";
 
 const initialState = {
   students: [],
+  student: {},
   error: null,
   request: false,
 };
@@ -41,16 +45,17 @@ function studentReducers(state = initialState, action) {
     case DETAIL_STUDENT:
       return {
         ...state,
-        students: action.payload,
+        student: action.payload,
       };
     case EDIT_STUDENT:
+      let arrNew = [...state.students];
+      const index = arrNew.findIndex((x) => x.id === action.payload.id);
+      arrNew[index] = action.payload;
       return {
-        // ...state,
-        // request: false,
-        // students: action.payload,
         ...state,
-        students: state.students,
+        students: arrNew,
         request: false,
+        // students: action.payload,
       };
     case EDIT_STUDENT_ERORR:
       return {
@@ -62,6 +67,12 @@ function studentReducers(state = initialState, action) {
       return {
         ...state,
       };
+    case SEARCH_STUDENT_REQUEST:
+      return {};
+    case SEARCH_STUDENT_SUCCESS:
+      return {};
+    case SEARCH_STUDENT_FAILED:
+      return {};
 
     default:
       return state;
